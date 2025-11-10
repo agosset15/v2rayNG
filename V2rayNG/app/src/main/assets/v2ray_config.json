@@ -1,107 +1,191 @@
 {
-  "stats":{},
+  "stats": {},
   "log": {
     "loglevel": "warning"
   },
-  "policy":{
-      "levels": {
-        "8": {
-          "handshake": 4,
-          "connIdle": 300,
-          "uplinkOnly": 1,
-          "downlinkOnly": 1
-        }
+  "policy": {
+    "levels": {
+      "8": {
+        "handshake": 4,
+        "connIdle": 300,
+        "uplinkOnly": 1,
+        "downlinkOnly": 1
+      }
+    },
+    "system": {
+      "statsOutboundUplink": true,
+      "statsOutboundDownlink": true
+    }
+  },
+  "inbounds": [
+    {
+      "tag": "socks",
+      "port": 10808,
+      "protocol": "socks",
+      "settings": {
+        "auth": "noauth",
+        "udp": true,
+        "userLevel": 8
       },
-      "system": {
-        "statsOutboundUplink": true,
-        "statsOutboundDownlink": true
+      "sniffing": {
+        "enabled": true,
+        "destOverride": [
+          "http",
+          "tls"
+        ]
       }
-  },
-  "inbounds": [{
-    "tag": "socks",
-    "port": 10808,
-    "protocol": "socks",
-    "settings": {
-      "auth": "noauth",
-      "udp": true,
-      "userLevel": 8
     },
-    "sniffing": {
-      "enabled": true,
-      "destOverride": [
-        "http",
-        "tls"
-      ]
+    {
+      "tag": "http",
+      "port": 10809,
+      "protocol": "http",
+      "settings": {
+        "userLevel": 8
+      }
     }
-  },
-  {
-    "tag": "http",
-    "port": 10809,
-    "protocol": "http",
-    "settings": {
-      "userLevel": 8
-    }
-  }
-],
-  "outbounds": [{
-    "tag": "proxy",
-    "protocol": "vmess",
-    "settings": {
-      "vnext": [
-        {
-          "address": "v2ray.cool",
-          "port": 10086,
-          "users": [
-            {
-              "id": "a3482e88-686a-4a58-8126-99c9df64b7bf",
-              "alterId": 0,
-              "security": "auto",
-              "level": 8
-            }
-          ]
+  ],
+  "outbounds": [
+    {
+      "tag": "proxy",
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "v2ray.cool",
+            "port": 10086,
+            "users": [
+              {
+                "id": "a3482e88-686a-4a58-8126-99c9df64b7bf",
+                "alterId": 0,
+                "security": "auto",
+                "level": 8
+              }
+            ]
+          }
+        ],
+        "servers": [
+          {
+            "address": "v2ray.cool",
+            "method": "chacha20",
+            "ota": false,
+            "password": "123456",
+            "port": 10086,
+            "level": 8
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp"
+      },
+      "mux": {
+        "enabled": false
+      }
+    },
+    {
+      "protocol": "freedom",
+      "settings": {
+        "domainStrategy": "UseIP"
+      },
+      "tag": "direct"
+    },
+    {
+      "protocol": "blackhole",
+      "tag": "block",
+      "settings": {
+        "response": {
+          "type": "http"
         }
-      ],
-      "servers": [
-        {
-        "address": "v2ray.cool",
-        "method": "chacha20",
-        "ota": false,
-        "password": "123456",
-        "port": 10086,
-        "level": 8
-      }
-      ]
-    },
-    "streamSettings": {
-      "network": "tcp"
-    },
-    "mux": {
-      "enabled": false
-    }
-  },
-  {
-    "protocol": "freedom",
-    "settings": {
-      "domainStrategy": "UseIP"
-    },
-    "tag": "direct"
-  },
-  {
-    "protocol": "blackhole",
-    "tag": "block",
-    "settings": {
-      "response": {
-        "type": "http"
       }
     }
-  }
   ],
   "routing": {
-      "domainStrategy": "AsIs",
-      "rules": []
+    "domainStrategy": "IPOnDemand",
+    "rules": [
+      {
+        "enabled": true,
+        "locked": false,
+        "outboundTag": "direct",
+        "protocol": [
+          "bittorrent"
+        ],
+        "remarks": "RU-3 [Торрент напрямую]"
+      },
+      {
+        "domain": [
+          "geosite:category-ads-all"
+        ],
+        "enabled": true,
+        "locked": false,
+        "outboundTag": "block",
+        "remarks": "RU-3 [Блокировка рекламы]"
+      },
+      {
+        "enabled": true,
+        "ip": [
+          "geoip:private"
+        ],
+        "locked": false,
+        "outboundTag": "direct",
+        "remarks": "RU-3 [Приватные сети напрямую]"
+      },
+      {
+        "domain": [
+          "geosite:private"
+        ],
+        "enabled": true,
+        "locked": false,
+        "outboundTag": "direct",
+        "remarks": "RU-3 [Приватные домены напрямую]"
+      },
+      {
+        "enabled": true,
+        "ip": [
+          "1.0.0.1",
+          "1.1.1.1",
+          "8.8.8.8",
+          "8.8.4.4"
+        ],
+        "locked": false,
+        "outboundTag": "proxy",
+        "remarks": "RU-3 [DNS в прокси]"
+      },
+      {
+        "enabled": true,
+        "locked": false,
+        "network": "udp",
+        "outboundTag": "proxy",
+        "port": "50000-65535",
+        "remarks": "RU-3 [Дискорд (Голосовой) в прокси]"
+      },
+      {
+        "enabled": true,
+        "ip": [
+          "geoip:ru-blocked"
+        ],
+        "locked": false,
+        "outboundTag": "proxy",
+        "remarks": "RU-3 [Заблокированные сети в прокси]"
+      },
+      {
+        "domain": [
+          "geosite:ru-blocked"
+        ],
+        "enabled": true,
+        "locked": false,
+        "outboundTag": "proxy",
+        "remarks": "RU-3 [Заблокированные домены в прокси]"
+      },
+      {
+        "enabled": true,
+        "locked": false,
+        "outboundTag": "direct",
+        "port": "0-65535",
+        "remarks": "RU-3 [Остальное напрямую]"
+      }
+    ]
   },
   "dns": {
-      "hosts": {},
-      "servers": []
+    "hosts": {},
+    "servers": []
   }
 }
