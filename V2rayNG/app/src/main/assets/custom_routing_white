@@ -1,83 +1,76 @@
 [
   {
-    "enabled": true,
-    "locked": false,
+    "port": "",
     "outboundTag": "direct",
     "protocol": [
       "bittorrent"
     ],
-    "remarks": "RU-3 [Торрент напрямую]"
+    "enabled": true,
+    "remarks": "Торрент напрямую"
   },
   {
+    "port": "",
+    "outboundTag": "block",
     "domain": [
       "geosite:category-ads-all"
     ],
     "enabled": true,
-    "locked": false,
-    "outboundTag": "block",
-    "remarks": "RU-3 [Блокировка рекламы]"
+    "remarks": "Блокировка рекламы"
   },
   {
-    "enabled": true,
+    "outboundTag": "direct",
     "ip": [
       "geoip:private"
     ],
-    "locked": false,
-    "outboundTag": "direct",
-    "remarks": "RU-3 [Приватные сети напрямую]"
+    "enabled": true,
+    "remarks": "Приватные сети напрямую"
   },
   {
+    "outboundTag": "direct",
     "domain": [
       "geosite:private"
     ],
     "enabled": true,
-    "locked": false,
+    "remarks": "Приватные домены напрямую"
+  },
+  {
     "outboundTag": "direct",
-    "remarks": "RU-3 [Приватные домены напрямую]"
-  },
-  {
-    "enabled": true,
     "ip": [
-      "1.0.0.1",
-      "1.1.1.1",
-      "8.8.8.8",
-      "8.8.4.4"
+      "geoip:ru"
     ],
-    "locked": false,
-    "outboundTag": "proxy",
-    "remarks": "RU-3 [DNS в прокси]"
-  },
-  {
     "enabled": true,
-    "locked": false,
-    "network": "udp",
-    "outboundTag": "proxy",
-    "port": "50000-65535",
-    "remarks": "RU-3 [Дискорд (Голосовой) в прокси]"
-  },
-  {
-    "enabled": true,
-    "ip": [
-      "geoip:ru-blocked"
-    ],
-    "locked": false,
-    "outboundTag": "proxy",
-    "remarks": "RU-3 [Заблокированные сети в прокси]"
+    "remarks": "Доступные только в России напрямую"
   },
   {
     "domain": [
-      "geosite:ru-blocked"
+      "regexp:.*\\.ru",
+      "regexp:.*\\.su",
+      "regexp:.*\\.xn--p1ai"
     ],
     "enabled": true,
     "locked": false,
-    "outboundTag": "proxy",
-    "remarks": "RU-3 [Заблокированные домены в прокси]"
+    "outboundTag": "direct",
+    "remarks": "Домены напрямую"
   },
   {
+    "domain": [
+      "geosite:CATEGORY-RU",
+      "geosite:CATEGORY-GOV-RU",
+      "geosite:ru-available-only-inside"
+    ],
     "enabled": true,
+    "ip": [
+      "geoip:RU",
+      "geoip:PRIVATE"
+    ],
     "locked": false,
     "outboundTag": "direct",
+    "remarks": "Доступные только в РФ напрямую"
+  },
+  {
     "port": "0-65535",
-    "remarks": "RU-3 [Остальное напрямую]"
+    "outboundTag": "proxy",
+    "enabled": true,
+    "remarks": "Остальное в прокси"
   }
 ]
