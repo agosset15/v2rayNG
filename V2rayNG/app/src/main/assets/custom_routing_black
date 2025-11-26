@@ -9,6 +9,18 @@
     "remarks": "RU-3 [Торрент напрямую]"
   },
   {
+      "enabled": true,
+      "locked": false,
+      "outboundTag": "proxy",
+      "domain": [
+        "geosite:telegram"
+      ],
+      network: [
+        "udp"
+      ]
+      "remarks": "RU-3 [Телеграм в прокси]"
+    },
+  {
     "domain": [
       "geosite:category-ads-all"
     ],
